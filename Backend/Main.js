@@ -3,19 +3,35 @@ const expressHandlebars = require('express-handlebars');
 
 const app = express();
 
-app.engine
-(
+app.engine(
     'hbs', 
     expressHandlebars({
-        defaultLayout: '../../Layouts/Main',
+        defaultLayout: 'Main',
         extname: '.hbs'
     })
 );
 
+/* Set custom directories */
+app.set('views', 'Views/');
+app.set('layoutsDir', __dirname + 'Layouts/');
+app.set('partialsDir', __dirname + 'Partials/');
+
+app.use(express.static("Public/"));
+
 app.get(
     '/', 
-    function(request, response) {
+    function(request, response) 
+    {
         response.render('./Test-page.hbs');
+        response.status(200);
+    }
+);
+
+app.get(
+    '/about', 
+    function(request, response) 
+    {
+        response.render('./About.hbs', {page: 'view'});
         response.status(200);
     }
 );
