@@ -1,24 +1,10 @@
 /* Main layout CSS file */
 html {
-    /*background-color: #C29B94;*/
     height: 100%;
 }
 
 body {
     min-height: 100%;
-}
-
-.menu-label {
-    /*color: #423533;*/
-}
-
-.menu-list {
-    /*border-left-color: #8C4D41 !important;*/
-}
-
-.nav-column {
-    min-width: 200px;
-    max-width: 400px;
 }
 
 .main-content {

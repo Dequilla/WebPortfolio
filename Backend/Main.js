@@ -1,7 +1,12 @@
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
+const database = require('./Database');
+const imageHandler = require('./ImageHandler');
 
 const app = express();
+
+database.setup();
+database.getImageURI(2);
 
 app.engine(
     'hbs', 
@@ -22,8 +27,7 @@ app.get(
     '/', 
     function(request, response) 
     {
-        response.render('./Test-page.hbs');
-        response.status(200);
+        response.redirect("/about");
     }
 );
 
@@ -31,10 +35,28 @@ app.get(
     '/about', 
     function(request, response) 
     {
-        response.render('./About.hbs', {page: 'view'});
+        response.render('./About.hbs');
         response.status(200);
     }
 );
+
+app.get(
+    '/contact',
+    function(request, response)
+    {
+        response.render('./Contact.hbs');
+        response.status(200);
+    }
+)
+
+app.get(
+    '/portfolio',
+    function(request, response)
+    {
+        response.render('./Portfolio.hbs');
+        response.status(200);
+    }
+)
 
 app.use(
     function(request, response, next)
