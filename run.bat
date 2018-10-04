@@ -1,1 +1,1 @@
-node .\Backend\Main.js
+node --use_strict .\Backend\Main.js

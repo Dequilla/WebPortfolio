@@ -2,11 +2,22 @@ const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const database = require('./Database');
 const imageHandler = require('./ImageHandler');
+const multer = require('multer');
+const fs = require('fs');
 
 const app = express();
 
 database.setup();
-database.getImageURI(2);
+imageHandler.setup();
+
+var upload = multer({ 
+    dest: __dirname + '/../Public/upload/',
+    onError: function(error, next)
+    {
+        console.log(error);
+        next(error);
+    }
+});
 
 app.engine(
     'hbs', 
@@ -36,7 +47,6 @@ app.get(
     function(request, response) 
     {
         response.render('./About.hbs');
-        response.status(200);
     }
 );
 
@@ -45,7 +55,6 @@ app.get(
     function(request, response)
     {
         response.render('./Contact.hbs');
-        response.status(200);
     }
 )
 
@@ -54,7 +63,54 @@ app.get(
     function(request, response)
     {
         response.render('./Portfolio.hbs');
-        response.status(200);
+    }
+)
+
+app.get(
+    '/admin/upload_file',
+    function(request, response)
+    {
+        response.render('./UploadFile.hbs');
+    }
+)
+
+app.get(
+    '/admin/view_images',
+    function(request, response)
+    {
+        const query = "SELECT * FROM images;";
+
+        database.db.all(query, function(error, images)
+        {
+            const model = {
+                images: images
+            }
+
+            response.render('./ViewImages.hbs', model);
+        });
+    }
+)
+
+app.post(
+    '/admin/upload_file',
+    upload.single('image'),
+    function(request, response, next)
+    {
+        const path = request.file.destination + request.file.filename;
+        const name = request.file.filename;
+        const ext =  request.file.mimetype.replace("image/", "");
+
+        fs.rename(path, path + "." + ext);
+
+        const query = "INSERT INTO images (imageName, fileExtension) VALUES (?, ?);";
+
+        database.db.run(query, [name, ext], function(error)
+        {
+            if(error)
+                console.log(error);
+            else
+                response.redirect("/admin/upload_file");
+        });
     }
 )
 
