@@ -10,15 +10,6 @@ const app = express();
 database.setup();
 imageHandler.setup();
 
-var upload = multer({ 
-    dest: __dirname + '/../Public/upload/',
-    onError: function(error, next)
-    {
-        console.log(error);
-        next(error);
-    }
-});
-
 app.engine(
     'hbs', 
     expressHandlebars({
@@ -67,49 +58,34 @@ app.get(
 )
 
 app.get(
-    '/admin/upload_file',
+    '/admin/images/view',
     function(request, response)
     {
-        response.render('./UploadFile.hbs');
-    }
-)
+        imageHandler.getImages(1, 25, function(error, images) {
+            if(error)
+                console.log(error);
+            else
+            {
+                const model = {
+                    images: images
+                };
 
-app.get(
-    '/admin/view_images',
-    function(request, response)
-    {
-        const query = "SELECT * FROM images;";
-
-        database.db.all(query, function(error, images)
-        {
-            const model = {
-                images: images
+                response.render('./Images.hbs', model);
             }
-
-            response.render('./ViewImages.hbs', model);
         });
     }
 )
 
 app.post(
-    '/admin/upload_file',
-    upload.single('image'),
+    '/admin/images/upload',
+    imageHandler.upload.single('image'),
     function(request, response, next)
     {
-        const path = request.file.destination + request.file.filename;
-        const name = request.file.filename;
-        const ext =  request.file.mimetype.replace("image/", "");
-
-        fs.rename(path, path + "." + ext);
-
-        const query = "INSERT INTO images (imageName, fileExtension) VALUES (?, ?);";
-
-        database.db.run(query, [name, ext], function(error)
-        {
+        imageHandler.uploadImage(request, function(error) {
             if(error)
                 console.log(error);
-            else
-                response.redirect("/admin/upload_file");
+
+            response.redirect("/admin/images/view");
         });
     }
 )

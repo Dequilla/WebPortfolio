@@ -12,3 +12,12 @@ body {
     min-height: 100%;
     padding: 50px;
 }
+
+.delete {
+    position: absolute;
+    margin: 20px;
+}
+
+.delete:hover {
+    background-color: #FF3734;
+}
