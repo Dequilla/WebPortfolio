@@ -2,6 +2,7 @@ const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const database = require('./Database');
 const imageHandler = require('./ImageHandler');
+const postsHandler = require('./PostsHandler');
 const multer = require('multer');
 const fs = require('fs');
 
@@ -9,6 +10,7 @@ const app = express();
 
 database.setup();
 imageHandler.setup();
+postsHandler.setup();
 
 app.engine(
     'hbs', 
@@ -89,6 +91,19 @@ app.post(
         });
     }
 )
+
+app.post(
+    '/admin/images/delete/:id',
+    function(request, response)
+    {
+        imageHandler.deleteImage(request.params.id, function(error) {
+            if(error)
+                console.log(error);
+
+            response.redirect("/admin/images/view");            
+        });
+    }
+)   
 
 app.use(
     function(request, response, next)

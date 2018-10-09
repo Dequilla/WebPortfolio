@@ -26,7 +26,7 @@ exports.setup = function()
         if(error)
             errorHandler.logError(__filename, error);
         else
-            console.log("Successfully created table for images!");
+            console.log("Successfully initialized table for images!");
     });
 }
 
@@ -49,7 +49,7 @@ exports.getImageURI = function(imageID)
 
 exports.getImages = function(startID, count, callback)
 {
-    const query = "SELECT imageName, fileExtension FROM images WHERE id >= ? LIMIT ?;";
+    const query = "SELECT * FROM images WHERE id >= ? LIMIT ?;";
 
     db.all(query, [startID, count], function(error, images) {
         callback(error, images);
@@ -74,8 +74,7 @@ exports.uploadImage = function(request, callback)
 
         const query = "INSERT INTO images (imageName, fileExtension) VALUES (?, ?);";
         
-        db.run(query, [name, ext], function(error)
-        {
+        db.run(query, [name, ext], function(error) {
             callback(error);
         });
     }
@@ -83,7 +82,24 @@ exports.uploadImage = function(request, callback)
     {
         // Delete from upload folder
         fs.unlink(oldPath + name, function(error) {
-            callback("Something other than an image was uploaded.");
+            callback("ERROR: Something other than an image was uploaded.");
         });
     }
+}
+
+exports.deleteImage = function(id, callback)
+{
+    var query = "SELECT imageName, fileExtension FROM images WHERE id = ?;";
+    
+    db.get(query, [id], function(error, image) {
+        var imageURI = image.imageName + "." + image.fileExtension;
+        
+        fs.unlink(imagesFolder + imageURI, function(error) {
+            query = "DELETE from images WHERE id = ?;";
+            
+            db.run(query, [id], function(error) {
+                callback(error);
+            });
+        })
+    });
 }
