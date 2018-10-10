@@ -22,3 +22,75 @@ exports.setup = function()
             console.log("Successfully initialized table for posts!");
     });
 }
+
+exports.createPost = function(title, body, imageID, callback)
+{
+    const query = "INSERT INTO posts (title, body, imageID) VALUES (?, ?, ?);";
+
+    db.run(query, [title, body, imageID], function(error) {
+        if(error)
+            errorHandler.logError(__filename, error);
+        else
+            console.log("Successfully created a post!");
+        
+        callback(error);
+    });
+}
+
+exports.getPosts = function(startID, count, callback)
+{
+    const query = "SELECT * FROM posts WHERE id >= ? LIMIT ?;";
+
+    db.all(query, [startID, count], function(error, posts) {
+        callback(error, posts);
+    });
+}
+
+exports.getPost = function(postID, callback)
+{
+    const query = "SELECT * FROM posts WHERE id = ?;";
+
+    db.get(query, [postID], function(error, post) {
+        callback(error);
+
+        if(error)
+        {
+            errorHandler.logError(__filename, error);
+            return undefined;
+        }
+        else
+        {
+            return post;
+        }
+    });
+}
+
+exports.getPostTitle = function(postID, callback)
+{
+    post = this.getPost(postID, callback);
+
+    if(post != undefined)
+    {
+        return post.title;
+    }
+}
+
+exports.getPostBody = function(postID, callback)
+{
+    post = this.getPost(postID, callback);
+
+    if(post != undefined)
+    {
+        return post.body;
+    }
+}
+
+exports.getPostImageID = function(postID, callback)
+{
+    post = this.getPost(postID, callback);
+
+    if(post != undefined)
+    {
+        return post.imageID;
+    }
+}

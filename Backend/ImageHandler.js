@@ -30,7 +30,7 @@ exports.setup = function()
     });
 }
 
-exports.getImageURI = function(imageID)
+exports.getImageURI = function(imageID, callback)
 {
     const query = "SELECT imageName, fileExtension FROM images WHERE id = ?";
 
@@ -38,11 +38,13 @@ exports.getImageURI = function(imageID)
         if(error)
         {
             errorHandler.logError(__filename, error);
-            return undefined;
+            callback(error, undefined);
         }
         else
         {
-            return imagesFolder + image.imageName + "." + image.fileExtension;
+            //TODO: Fix getting images from database easier
+
+            callback(error, imagesFolder + image.imageName + "." + image.fileExtension);
         }
     });
 }

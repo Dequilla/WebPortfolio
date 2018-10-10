@@ -3,22 +3,23 @@ const expressHandlebars = require('express-handlebars');
 const database = require('./Database');
 const imageHandler = require('./ImageHandler');
 const postsHandler = require('./PostsHandler');
-const multer = require('multer');
-const fs = require('fs');
 
 const app = express();
+app.engine('hbs', expressHandlebars({
+    defaultLayout: 'Main',
+    extname: '.hbs',
+    helpers: {
+        getImageURI: function(imageID) {
+            imageHandler.getImageURI(imageID, function(error, imageURI) {
+                return imageURI;
+            });
+        }
+    }
+}));
 
 database.setup();
 imageHandler.setup();
 postsHandler.setup();
-
-app.engine(
-    'hbs', 
-    expressHandlebars({
-        defaultLayout: 'Main',
-        extname: '.hbs'
-    })
-);
 
 /* Set custom directories */
 app.set('views', 'Views/');
@@ -55,7 +56,18 @@ app.get(
     '/portfolio',
     function(request, response)
     {
-        response.render('./Portfolio.hbs');
+        postsHandler.getPosts(1, 6, function(error, posts) {
+            if(error)
+                errorHandler.logError(__filename, error);
+            else
+            {
+                const model = {
+                    posts: posts
+                };
+
+                response.render('./Portfolio.hbs', model);
+            }
+        });
     }
 )
 
