@@ -56,6 +56,7 @@ app.get(
     '/portfolio',
     function(request, response)
     {
+	    // TODO
         postsHandler.getPosts(1, 6, function(error, posts) {
             if(error)
                 errorHandler.logError(__filename, error);
