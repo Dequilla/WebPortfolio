@@ -3,6 +3,7 @@ const expressHandlebars = require('express-handlebars');
 const database = require('./Database');
 const imageHandler = require('./ImageHandler');
 const postsHandler = require('./PostsHandler');
+const errorHandler = require('./ErrorHandler');
 
 const app = express();
 app.engine('hbs', expressHandlebars({
@@ -56,7 +57,6 @@ app.get(
     '/portfolio',
     function(request, response)
     {
-	    // TODO
         postsHandler.getPosts(1, 6, function(error, posts) {
             if(error)
                 errorHandler.logError(__filename, error);
@@ -69,6 +69,22 @@ app.get(
                 response.render('./Portfolio.hbs', model);
             }
         });
+    }
+)
+
+app.get(
+    '/admin/post/create',
+    function(request, response)
+    {
+        response.render('./Post.hbs');
+    }
+)
+
+app.post(
+    '/admin/post/create',
+    function(request, response)
+    {
+        response.redirect('/admin/post/create');
     }
 )
 

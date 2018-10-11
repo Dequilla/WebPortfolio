@@ -1,4 +1,5 @@
 const imageHandler = require('./ImageHandler');
+
 const errorHandler = require('./ErrorHandler');
 const database = require('./Database');
 
@@ -8,7 +9,7 @@ exports.setup = function()
 {
     const query = "CREATE TABLE IF NOT EXISTS posts \
     ( \
-        id INTEGER PRIMARY KEY AUTOINCREMENT, \
+        postID INTEGER PRIMARY KEY AUTOINCREMENT, \
         title TEXT NOT NULL, \
         body TEXT, \
         imageID INTEGER NOT NULL, \
@@ -39,7 +40,12 @@ exports.createPost = function(title, body, imageID, callback)
 
 exports.getPosts = function(startID, count, callback)
 {
-    const query = "SELECT * FROM posts WHERE id >= ? LIMIT ?;";
+    const query = "SELECT * \
+                    FROM posts \
+                    JOIN images ON images.id = posts.imageID \
+                    WHERE posts.postID >= ? \
+                    ORDER BY posts.postID \
+                    LIMIT ?;";
 
     db.all(query, [startID, count], function(error, posts) {
         callback(error, posts);
@@ -48,7 +54,7 @@ exports.getPosts = function(startID, count, callback)
 
 exports.getPost = function(postID, callback)
 {
-    const query = "SELECT * FROM posts WHERE id = ?;";
+    const query = "SELECT * FROM posts WHERE postsID = ?;";
 
     db.get(query, [postID], function(error, post) {
         callback(error);

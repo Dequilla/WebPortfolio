@@ -1,4 +1,5 @@
 const multer = require('multer');
+
 const fs = require('fs');
 
 const errorHandler = require('./ErrorHandler')
@@ -35,7 +36,7 @@ exports.getImageURI = function(imageID, callback)
     const query = "SELECT imageName, fileExtension FROM images WHERE id = ?";
 
     db.get(query, [imageID], function(error, image) {
-        if(error)
+        if(error || image == undefined)
         {
             errorHandler.logError(__filename, error);
             callback(error, undefined);
@@ -43,7 +44,7 @@ exports.getImageURI = function(imageID, callback)
         else
         {
             //TODO: Fix getting images from database easier
-
+            //
             callback(error, imagesFolder + image.imageName + "." + image.fileExtension);
         }
     });
