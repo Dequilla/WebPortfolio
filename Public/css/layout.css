@@ -42,6 +42,7 @@ body {
 
 .copyable:hover {
     background-color: rgba(10,10,10,.5);
+    color: #fff;
 }
 
 .copyable:after {
