@@ -7,6 +7,17 @@ body {
     min-height: 100%;
 }
 
+.post-container {
+    text-align: center;
+    margin: 10px;
+}
+
+.post-element {
+    display: inline-block;
+    width: 60%;
+    margin: 20px;
+}
+
 .main-content {
     height: 100%;
     min-height: 100%;

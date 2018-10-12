@@ -28,6 +28,8 @@ app.set('layoutsDir', __dirname + 'Layouts/');
 app.set('partialsDir', __dirname + 'Partials/');
 
 app.use(express.static("Public/"));
+app.use(express.json());       // to support JSON-encoded bodies
+app.use(express.urlencoded()); // to support URL-encoded bodies
 
 app.get(
     '/', 
@@ -57,17 +59,15 @@ app.get(
     '/portfolio',
     function(request, response)
     {
-        postsHandler.getPosts(1, 6, function(error, posts) {
+        postsHandler.getPosts(1, 25, function(error, posts) {
             if(error)
                 errorHandler.logError(__filename, error);
-            else
-            {
-                const model = {
-                    posts: posts
-                };
 
-                response.render('./Portfolio.hbs', model);
-            }
+            const model = {
+                posts: posts
+            };
+
+            response.render('./Portfolio.hbs', model);
         });
     }
 )
@@ -76,15 +76,17 @@ app.get(
     '/portfolio/:id',
     function(request, response)
     {
-        postHandler.getPost(request.params.id, function(error, post)
+        postsHandler.getPostWithImage(request.params.id, function(error, post)
         {
+            if(error)
+                errorHandler.logError(__filename, error);
+
+            const model = {
+                post: post
+            }
+
+            response.render('./Portfolio.hbs', model); 
         });
-
-        const model = {
-            postID: request.params.id
-        }
-
-        response.render('./Portfolio.hbs'); 
     }
 )
 
@@ -100,7 +102,13 @@ app.post(
     '/admin/post/create',
     function(request, response)
     {
-        response.redirect('/admin/post/create');
+        postsHandler.createPost(request.body.title, request.body.body, request.body.imageID, function(error)
+        {
+            if(error)
+                errorHandler.logError(__filename, error);
+            else
+                response.redirect('/admin/post/create');
+        });
     }
 )
 
