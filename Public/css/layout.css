@@ -109,6 +109,6 @@ body {
     margin: 20px;
 }
 
-.square:hover {
+.square.zoom:hover {
     transform: scale(1.1);
 }
