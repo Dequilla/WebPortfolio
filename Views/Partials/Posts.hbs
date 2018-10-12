@@ -1,0 +1,11 @@
+<div>
+    {{#each posts}}
+        <div class="square-wrapper">
+            <a href="/portfolio/{{ postID }}">
+                <div class="square" style="background-image: url('/images/{{ imageName }}.{{fileExtension}}'); background-color: black;">
+                    <h1>{{ title }}</h1>
+                </div>
+            </a>
+        </div>
+    {{/each}}
+</div>
