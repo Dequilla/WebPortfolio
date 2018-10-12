@@ -38,6 +38,20 @@ router.post(
 )
 
 router.post(
+    '/update',
+    imageHandler.upload.single('image'),
+    function(request, response, next)
+    {
+        imageHandler.updateImage(request, function(error) {
+            if(error)
+                console.log(error);
+
+            response.redirect("/admin/images/view");
+        });
+    }
+)
+
+router.post(
     '/delete/:id',
     function(request, response)
     {

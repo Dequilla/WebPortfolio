@@ -5,8 +5,8 @@ const imageHandler = require('./ImageHandler');
 const postsHandler = require('./PostsHandler');
 const errorHandler = require('./ErrorHandler');
 
-const images = require('./Routers/Images.js');
-const posts = require('./Routers/Post.js');
+const images = require('./Routers/Images');
+const posts = require('./Routers/Post');
 
 const app = express();
 app.engine('hbs', expressHandlebars({
@@ -99,6 +99,7 @@ app.get(
     }
 )
 
+app.use(
     function(request, response, next)
     {
         response.status(404);

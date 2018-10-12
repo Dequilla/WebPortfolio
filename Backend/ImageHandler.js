@@ -90,6 +90,47 @@ exports.uploadImage = function(request, callback)
     }
 }
 
+exports.updateImage = function(request, callback)
+{
+    const oldPath = request.file.destination;
+    const newPath = imagesFolder;
+    const name = request.file.filename;
+
+    const imageID = request.body.imageID;
+    
+    var query = "SELECT imageName, fileExtension FROM images WHERE id = ?;"; 
+    
+    db.get(query, [imageID], function(error, image) {
+       
+        // Remove old picture
+        fs.unlink(newPath + image.imageName + '.' + image.fileExtension, function(error) {
+            // Check file type
+            if(request.file.mimetype.indexOf("image/") != -1)
+            {   
+                // Might not work for all filetypes, but png, jpeg, gif and bmp is fine
+                const ext =  request.file.mimetype.replace("image/", "");
+        
+                fs.rename(oldPath + name, newPath + name + "." + ext, function(error) {
+                    //callback(error);
+                });
+
+                query = "UPDATE images SET imageName = ?, fileExtension = ? WHERE id = ?;";
+       console.log("FN: " + name + " EXT: " + ext + " ImageID: " + imageID ); 
+                db.run(query, [name, ext, imageID], function(error) {
+                    callback(error);
+                });
+            }
+            else
+            {
+                // Delete from upload folder
+                fs.unlink(oldPath + name, function(error) {
+                    callback("ERROR: Something other than an image was uploaded.");
+                });
+            }
+        });
+    }); 
+}
+
 exports.deleteImage = function(id, callback)
 {
     var query = "SELECT imageName, fileExtension FROM images WHERE id = ?;";

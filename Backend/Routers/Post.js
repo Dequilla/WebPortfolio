@@ -12,7 +12,7 @@ router.get(
     }
 )
 
-app.post(
+router.post(
     '/create',
     function(request, response)
     {
