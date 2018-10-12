@@ -73,6 +73,22 @@ app.get(
 )
 
 app.get(
+    '/portfolio/:id',
+    function(request, response)
+    {
+        postHandler.getPost(request.params.id, function(error, post)
+        {
+        });
+
+        const model = {
+            postID: request.params.id
+        }
+
+        response.render('./Portfolio.hbs'); 
+    }
+)
+
+app.get(
     '/admin/post/create',
     function(request, response)
     {

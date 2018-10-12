@@ -1,1 +1,5 @@
-{{> Posts }}
+{{ #if postID }}
+    {{> Post }}
+{{ else }}
+    {{> Posts }}
+{{ /if }}

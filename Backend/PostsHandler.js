@@ -54,20 +54,30 @@ exports.getPosts = function(startID, count, callback)
 
 exports.getPost = function(postID, callback)
 {
-    const query = "SELECT * FROM posts WHERE postsID = ?;";
+    const query = "SELECT * FROM posts WHERE postID = ?;";
 
     db.get(query, [postID], function(error, post) {
-        callback(error);
 
         if(error)
-        {
             errorHandler.logError(__filename, error);
-            return undefined;
-        }
-        else
-        {
-            return post;
-        }
+
+        callback(error, post);
+    });
+}
+
+exports.getPostWithImage = function(postID, callback)
+{
+    const query = "SELECT * \
+                    FROM posts \
+                    JOIN images ON images.id = posts.imageID \
+                    WHERE postID = ?;";
+
+    db.get(query, [postID], function(error, post) {
+
+        if(error)
+            errorHandler.logError(__filename, error);
+
+        callback(error, post);
     });
 }
 
