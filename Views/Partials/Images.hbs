@@ -1,11 +1,11 @@
-<div class="columns is-multiline">
-    {{#each images}}
-        <div class="column is-4">
+{{#each images}}
+    <div class="square-wrapper">
+        <div style="background-image: url('/images/{{ imageName }}.{{ fileExtension }}');" class="square">
             <form id="deleteForm{{id}}" method="post" action="/admin/images/delete/{{id}}">
                 <input type="hidden" name="name" value="value" /> 
                 <a class="delete is-large" onclick="document.getElementById('deleteForm{{id}}').submit();"></a>
+                <a class="copyable" onclick="alert('Image ID has been copied to the clipboard!');" data-clipboard-text="{{id}}"></a>
             </form>
-            <img class="is-square is-flex" src="/images/{{imageName}}.{{fileExtension}}"/>
         </div>
-    {{/each}}
-</div>
+    </div>
+{{/each}}

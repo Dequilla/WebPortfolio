@@ -81,6 +81,9 @@ app.get(
             if(error)
                 errorHandler.logError(__filename, error);
 
+            // TODO: Use some sort of markup instead/clientside?
+            post.body = post.body.replace(/(\r\n|\n|\r)/gm, '<br/>');
+
             const model = {
                 post: post
             }
