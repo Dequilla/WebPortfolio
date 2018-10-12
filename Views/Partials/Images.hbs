@@ -4,7 +4,7 @@
             <form id="deleteForm{{id}}" method="post" action="/admin/images/delete/{{id}}">
                 <input type="hidden" name="name" value="value" /> 
                 <a class="delete is-large" onclick="document.getElementById('deleteForm{{id}}').submit();"></a>
-                <a class="copyable" data-clipboard-text="{{id}}"></a>
+                <a class="copyable" onclick="alert('Image ID has been copied to the clipboard!');" data-clipboard-text="{{id}}"></a>
             </form>
         </div>
     </div>
