@@ -5,6 +5,9 @@ const imageHandler = require('./ImageHandler');
 const postsHandler = require('./PostsHandler');
 const errorHandler = require('./ErrorHandler');
 
+const images = require('./Routers/Images.js');
+const posts = require('./Routers/Post.js');
+
 const app = express();
 app.engine('hbs', expressHandlebars({
     defaultLayout: 'Main',
@@ -30,6 +33,9 @@ app.set('partialsDir', __dirname + 'Partials/');
 app.use(express.static("Public/"));
 app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded()); // to support URL-encoded bodies
+
+app.use('/admin/images/', images.router);
+app.use('/admin/post/', posts.router);
 
 app.get(
     '/', 
@@ -93,75 +99,6 @@ app.get(
     }
 )
 
-app.get(
-    '/admin/post/create',
-    function(request, response)
-    {
-        response.render('./Post.hbs');
-    }
-)
-
-app.post(
-    '/admin/post/create',
-    function(request, response)
-    {
-        postsHandler.createPost(request.body.title, request.body.body, request.body.imageID, function(error)
-        {
-            if(error)
-                errorHandler.logError(__filename, error);
-            else
-                response.redirect('/admin/post/create');
-        });
-    }
-)
-
-app.get(
-    '/admin/images/view',
-    function(request, response)
-    {
-        imageHandler.getImages(1, 25, function(error, images) {
-            if(error)
-                console.log(error);
-            else
-            {
-                const model = {
-                    images: images
-                };
-
-                response.render('./Images.hbs', model);
-            }
-        });
-    }
-)
-
-app.post(
-    '/admin/images/upload',
-    imageHandler.upload.single('image'),
-    function(request, response, next)
-    {
-        imageHandler.uploadImage(request, function(error) {
-            if(error)
-                console.log(error);
-
-            response.redirect("/admin/images/view");
-        });
-    }
-)
-
-app.post(
-    '/admin/images/delete/:id',
-    function(request, response)
-    {
-        imageHandler.deleteImage(request.params.id, function(error) {
-            if(error)
-                console.log(error);
-
-            response.redirect("/admin/images/view");            
-        });
-    }
-)   
-
-app.use(
     function(request, response, next)
     {
         response.status(404);
