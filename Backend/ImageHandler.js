@@ -40,11 +40,10 @@ exports.getImageURI = function(imageID, callback)
         {
             errorHandler.logError(__filename, error);
             callback(error, undefined);
+            return;
         }
         else
         {
-            //TODO: Fix getting images from database easier
-            //
             callback(error, imagesFolder + image.imageName + "." + image.fileExtension);
         }
     });
@@ -61,6 +60,14 @@ exports.getImages = function(startID, count, callback)
 
 exports.uploadImage = function(request, callback)
 {
+    if(request.file == undefined || 
+        request.file == null ||
+        request.file.size <= 0)
+    {
+        callback("No file was uploaded");
+        return;
+    }
+
     const oldPath = request.file.destination;
     const newPath = imagesFolder;
     const name = request.file.filename;
@@ -72,7 +79,11 @@ exports.uploadImage = function(request, callback)
         const ext =  request.file.mimetype.replace("image/", "");
         
         fs.rename(oldPath + name, newPath + name + "." + ext, function(error) {
-            //callback(error);
+            if(error)
+            {
+                callback(error);
+                return;
+            }
         });
 
         const query = "INSERT INTO images (imageName, fileExtension) VALUES (?, ?);";
@@ -85,23 +96,53 @@ exports.uploadImage = function(request, callback)
     {
         // Delete from upload folder
         fs.unlink(oldPath + name, function(error) {
-            callback("ERROR: Something other than an image was uploaded.");
+            const errorString = "ERROR: Something other than an image was uploaded.";
+
+            if(error)
+                callback(errorString + " FS Error(Couldn't remove file): " + error);
+            else
+                callback(errorString);
+
+            return;
         });
     }
 }
 
 exports.updateImage = function(request, callback)
 {
+    if(request.file == undefined ||
+        request.file == null ||
+        request.file.size <= 0)
+    {
+        callback("No file was uploaded");
+        return;
+    }
+
     const oldPath = request.file.destination;
     const newPath = imagesFolder;
     const name = request.file.filename;
 
+    if(request.body.imageID == undefined ||
+        request.body.imageID == null ||
+        !Number.isInteger(parseInt(request.body.imageID)) 
+    )
+    {
+        callback("No imageID sent to the server, image can't be updated.");
+        return;
+    }
     const imageID = request.body.imageID;
     
     var query = "SELECT imageName, fileExtension FROM images WHERE id = ?;"; 
     
     db.get(query, [imageID], function(error, image) {
-       
+        if(error ||
+        image == undefined ||
+        image == null)
+        {
+            callback(error);
+            return;
+        }
+
         // Remove old picture
         fs.unlink(newPath + image.imageName + '.' + image.fileExtension, function(error) {
             // Check file type
@@ -111,7 +152,11 @@ exports.updateImage = function(request, callback)
                 const ext =  request.file.mimetype.replace("image/", "");
         
                 fs.rename(oldPath + name, newPath + name + "." + ext, function(error) {
-                    //callback(error);
+                    if(error)
+                    {
+                        callback(error);
+                        return;
+                    }
                 });
 
                 query = "UPDATE images SET imageName = ?, fileExtension = ? WHERE id = ?;";
@@ -124,7 +169,14 @@ exports.updateImage = function(request, callback)
             {
                 // Delete from upload folder
                 fs.unlink(oldPath + name, function(error) {
-                    callback("ERROR: Something other than an image was uploaded.");
+                    const errorString = "ERROR: Something other than an image was uploaded.";
+
+                    if(error)
+                        callback(errorString + " FS Error(Couldn't remove file): " + error);
+                    else
+                        callback(errorString);
+
+                    return;
                 });
             }
         });

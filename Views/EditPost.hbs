@@ -1,0 +1,17 @@
+<div class="post-container">
+    <form class="post-element" method="POST" action="/admin/post/edit">
+        <div class="post-element">
+            <label for="title">Post name:</label><input class="input" type="text" name="title" value="{{post.title}}"/>
+        </div>
+        <div class="post-element">
+            <label for="body">Body:</label><textarea style="resize: vertical; height: 20em;" class="input" name="body" >{{post.body}}</textarea>
+        </div>
+        <div class="post-element">
+            <label for="imageID">Image ID:</label><input class="input" type="number" name="imageID" value="{{post.imageID}}"/>
+        </div>
+        <div class="post-element">
+            <input type="hidden" name="postID" value="{{postID}}"/>
+            <input class="input" type="submit"/>
+        </div>
+    </form>
+</div>

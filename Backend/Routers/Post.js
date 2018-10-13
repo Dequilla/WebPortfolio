@@ -19,9 +19,9 @@ router.post(
         postsHandler.createPost(request.body.title, request.body.body, request.body.imageID, function(error)
         {
             if(error)
-                errorHandler.logError(__filename, error);
-            else
-                response.redirect('/admin/post/create');
+                console.log(__filename + " -> " + error);
+            
+            response.redirect('/admin/post/create');
         });
     }
 )
@@ -40,10 +40,19 @@ router.post(
 )
 
 router.get(
-    '/edit',
+    '/edit/:postID',
     function(request, response)
     {
-        response.render('EditPost.hbs');
+        postsHandler.getPost(request.params.postID, function(error, post) {
+
+            const model = {
+                post: post,
+                postID: request.params.postID
+            }
+
+            response.render('EditPost.hbs', model);
+        
+        });
     }
 )
 
@@ -51,8 +60,13 @@ router.post(
     '/edit',
     function(request, response)
     {
-        const redirectURI = '/portfolio/' + request.body.postID;
-        response.redirect(redirectURI);
+        postsHandler.editPost(request.body.postID, request.body.title, request.body.body, request.body.imageID, function(error) {
+            if(error)
+                console.log(__filename + " -> " + error);
+
+            const redirectURI = '/portfolio/' + request.body.postID;
+            response.redirect(redirectURI);
+        });
     }
 )
 
