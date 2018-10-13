@@ -81,32 +81,14 @@ exports.getPostWithImage = function(postID, callback)
     });
 }
 
-exports.getPostTitle = function(postID, callback)
+exports.deletePost = function(postID, callback)
 {
-    post = this.getPost(postID, callback);
+    const query = "DELETE FROM posts WHERE postID = ?;";
 
-    if(post != undefined)
-    {
-        return post.title;
-    }
-}
+    db.run(query, [postID], function(error) {
+        if(error)
+            errorHandler.logError(__filename, error);
 
-exports.getPostBody = function(postID, callback)
-{
-    post = this.getPost(postID, callback);
-
-    if(post != undefined)
-    {
-        return post.body;
-    }
-}
-
-exports.getPostImageID = function(postID, callback)
-{
-    post = this.getPost(postID, callback);
-
-    if(post != undefined)
-    {
-        return post.imageID;
-    }
+        callback(error);
+    });
 }
