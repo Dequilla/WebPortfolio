@@ -17,4 +17,40 @@
     <div class="post-element">
         <p class="post-text">{{{post.body}}}</p>
     </div>
+    <div class="post-container">
+        <form method="POST" action="/comment/create">
+            <div class="post-element">
+                <p style="float: left;">Name:</p>
+                <input class="input" name="commenterName" type="text" placeholder="Your name" required>
+            </div>
+            <div class="post-element">
+                <p style="float: left;">Email:</p>
+                <input class="input" name="commenterEmail" type="email" placeholder="Your email (not mandatory)">
+            </div>
+            <div class="post-element">
+                <p style="float: left;">Comment:</p>
+                <textarea style="resize: vertical; min-height: 6em;" class="input" name="commentBody" placeholder="Comment here" required></textarea>
+            </div>
+            <input name="postID" type="hidden" value="{{post.postID}}" required>
+            <div class="post-element">
+                <input class="button" type="submit" value="Comment">
+            </div>
+        </form>
+    </div>
+    {{#if comments}}
+        <div class="post-container">
+            <h1 class="title is-large">
+                Comments
+            </h1>
+            {{#each comments}}
+                <div class="comment-container">
+                    <p class="comment-element name">{{commenterName}}</p>
+                    {{#if commenterEmail}}
+                        <a class="comment-element email" href="mailto:{{commenterEmail}}">{{commenterEmail}}</a>
+                    {{/if}}
+                    <p class="comment-element body">{{commentBody}}</p>
+                </div>
+            {{/each}}
+        </div>
+    {{/if}}
 </div>

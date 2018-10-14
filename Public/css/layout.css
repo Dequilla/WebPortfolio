@@ -120,3 +120,29 @@ input {
 .square.zoom:hover {
     transform: scale(1.1);
 }
+
+/* comment */
+.comment-container {
+    display: inline-block;
+    border-top: 1px solid #dbdbdb;
+    padding-top: 20px;
+    margin-bottom: 20px;
+    width: 50%;
+    text-align: left;
+}
+
+.comment-element {
+    display: block;
+}
+
+.comment-element.name {
+   font-weight: 700;
+   font-size: 1.3em;
+}
+
+.comment-element.email {
+}
+
+.comment-element.body {
+    padding-top: 10px;
+}
