@@ -5,11 +5,13 @@ const imageHandler = require('./ImageHandler');
 const postsHandler = require('./PostsHandler');
 const errorHandler = require('./ErrorHandler');
 const commentHandler = require('./Handlers/CommentHandler');
+const loginHandler = require('./Handlers/LoginHandler');
 
 const images = require('./Routers/Images');
 const posts = require('./Routers/Post');
 const portfolio = require('./Routers/Portfolio');
 const comment = require('./Routers/Comment');
+const login = require('./Routers/Login');
 
 const app = express();
 app.engine('hbs', expressHandlebars({
@@ -38,10 +40,13 @@ app.use(express.static("Public/"));
 app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded()); // to support URL-encoded bodies
 
+loginHandler.setup(app);
+
 app.use('/admin/images/', images.router);
 app.use('/admin/post/', posts.router);
 app.use('/portfolio', portfolio.router);
 app.use('/comment/', comment.router);
+app.use('/login', login.router);
 
 app.get(
     '/', 
@@ -55,7 +60,11 @@ app.get(
     '/about', 
     function(request, response) 
     {
-        response.render('./About.hbs');
+        const model = {
+            isLoggedIn: loginHandler.isLoggedIn(request)
+        }
+
+        response.render('./About.hbs', model);
     }
 );
 
@@ -63,7 +72,11 @@ app.get(
     '/contact',
     function(request, response)
     {
-        response.render('./Contact.hbs');
+        const model = {
+            isLoggedIn: loginHandler.isLoggedIn(request)
+        }
+
+        response.render('./Contact.hbs', model);
     }
 )
 
@@ -74,7 +87,11 @@ app.use(
 
         if (request.accepts('html'))
         {
-            response.render('./404.hbs');
+            const model = {
+                isLoggedIn: loginHandler.isLoggedIn(request)
+            }
+
+            response.render('./404.hbs', model);
         }
         else
         {

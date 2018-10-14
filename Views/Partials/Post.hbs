@@ -1,19 +1,21 @@
 <div class="post-container">
     <a href="/images/{{post.imageName}}.{{post.fileExtension}}">
-        <img class="post-element" src="/images/{{post.imageName}}.{{post.fileExtension}}" alt="{{post.title}}">
+        <img class="has-shadow post-element" src="/images/{{post.imageName}}.{{post.fileExtension}}" alt="{{post.title}}">
     </a>
     <h1 class="post-element title is-1">{{post.title}}</h1>
-    <div class="columns">
-        <div class="column is-4"></div>
-        <form class="column is-2" method="GET" action="/admin/post/edit/{{post.postID}}">
-            <input class="button" type="submit" value="Edit Post">
-        </form> 
-        <form class="column is-2" method="POST" action="/admin/post/delete">
-            <input type="hidden" name="postID" value="{{post.postID}}">
-            <input class="button" style="background-color: #ffdddd;" type="submit" value="Delete Post">
-        </form>
-        <div class="column is-4"></div>
-    </div>
+    {{#if isLoggedIn}}
+        <div class="columns">
+            <div class="column is-4"></div>
+            <form class="column is-2" method="GET" action="/admin/post/edit/{{post.postID}}">
+                <input class="button" type="submit" value="Edit Post">
+            </form> 
+            <form class="column is-2" method="POST" action="/admin/post/delete">
+                <input type="hidden" name="postID" value="{{post.postID}}">
+                <input class="button" style="background-color: #ffdddd;" type="submit" value="Delete Post">
+            </form>
+            <div class="column is-4"></div>
+        </div>
+    {{/if}}
     <div class="post-element">
         <p class="post-text">{{{post.body}}}</p>
     </div>
@@ -49,23 +51,24 @@
                         <a class="comment-element email" href="mailto:{{commenterEmail}}">{{commenterEmail}}</a>
                     {{/if}}
                     <p class="comment-element body">{{commentBody}}</p>
-                    <div class="columns">
-                        <form class="comment-element column" method="POST" action="/comment/delete">
-                            <input name="postID" type="hidden" value="{{../post.postID}}">
-                            <input name="commentID" type="hidden" value="{{commentID}}">
-                            <input type="submit" class="button is-small" style="background-color: #ffdddd;" value="Delete Comment"/>
-                        </form>
-                        <div class="column comment-element">
-                            <script>
-                                function expandEditForm(commentID)
-                                {
-                                    var editForm = document.getElementById('edit-form-' + commentID);
-                                    editForm.style.maxHeight = '600px';
-                                }
-                            </script>
-                            <a onclick="expandEditForm({{commentID}});" style="top: 5px;" class="button is-small">Edit Comment</a>
+                    {{#if ../isLoggedIn}}
+                        <div class="columns">
+                            <form class="comment-element column" method="POST" action="/comment/delete">
+                                <input name="postID" type="hidden" value="{{../post.postID}}">
+                                <input name="commentID" type="hidden" value="{{commentID}}">
+                                <input type="submit" class="button is-small" style="background-color: #ffdddd;" value="Delete Comment"/>
+                            </form>
+                            <div class="column comment-element">
+                                <script>
+                                    function expandEditForm(commentID)
+                                    {
+                                        var editForm = document.getElementById('edit-form-' + commentID);
+                                        editForm.style.maxHeight = '600px';
+                                    }
+                                </script>
+                                <a onclick="expandEditForm({{commentID}});" style="top: 5px;" class="button is-small">Edit Comment</a>
+                            </div>
                         </div>
-                    </div>
                         <form id="edit-form-{{commentID}}" style="max-height: 0px; overflow: hidden; transition: max-height .6s linear; -webkit-transition: max-height .6s linear;" method="POST" action="/comment/edit">
                             <div class="post-element">
                                 <p style="float: left;">Name:</p>
@@ -85,6 +88,7 @@
                                 <input class="button" type="submit" value="Edit Comment">
                             </div>
                         </form>
+                    {{/if}}
                 </div>
             {{/each}}
         </div>

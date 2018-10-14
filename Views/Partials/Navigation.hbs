@@ -5,9 +5,11 @@
         <li><a href="/contact">Contact</a></li>
         <li><a href="/portfolio">Portfolio</a></li>
     </ul>
+    {{#if isLoggedIn}}
     <h2 class="menu-label is-large content">Admin</h2>
     <ul class="menu-list is-medium content">
         <li><a href="/admin/post/create">Create Post</a></li>
         <li><a href="/admin/images/view">Manage Images</a></li>
     </ul>
+    {{/if}}
 </nav>

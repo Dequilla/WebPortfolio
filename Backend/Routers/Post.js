@@ -1,21 +1,38 @@
 const express = require('express');
 
 const postsHandler = require('../PostsHandler.js');
+const loginHandler = require('../Handlers/LoginHandler');
 
 const router = express.Router();
 
 router.get(
     '/create',
-    function(request, response)
+    function(request, response, next)
     {
-        response.render('./Post.hbs');
+        if(!loginHandler.isLoggedIn(request))
+        {
+            next("You need to be logged in as an admin to access this page");
+            return;
+        }
+        
+        const model = {
+            isLoggedIn: loginHandler.isLoggedIn(request)
+        }
+
+        response.render('./Post.hbs', model);
     }
 )
 
 router.post(
     '/create',
-    function(request, response)
+    function(request, response, next)
     {
+        if(!loginHandler.isLoggedIn(request))
+        {
+            next("You need to be logged in as an admin to create posts");
+            return;
+        }
+
         postsHandler.createPost(request.body.title, request.body.body, request.body.imageID, function(error)
         {
             if(error)
@@ -28,8 +45,14 @@ router.post(
 
 router.post(
     '/delete',
-    function(request, response)
+    function(request, response, next)
     {
+        if(!loginHandler.isLoggedIn(request))
+        {
+            next("You need to be logged in as an admin to delete posts");
+            return;
+        }
+
         postsHandler.deletePost(request.body.postID, function(error) {
             if(error)
                 console.log(error);
@@ -43,11 +66,18 @@ router.get(
     '/edit/:postID',
     function(request, response)
     {
+        if(!loginHandler.isLoggedIn(request))
+        {
+            next("You need to be logged in as an admin to edit posts");
+            return;
+        }
+
         postsHandler.getPost(request.params.postID, function(error, post) {
 
             const model = {
                 post: post,
-                postID: request.params.postID
+                postID: request.params.postID,
+                isLoggedIn: loginHandler.isLoggedIn(request)
             }
 
             response.render('EditPost.hbs', model);
@@ -60,6 +90,12 @@ router.post(
     '/edit',
     function(request, response)
     {
+        if(!loginHandler.isLoggedIn(request))
+        {
+            next("You need to be logged in as an admin to edit posts");
+            return;
+        }
+
         postsHandler.editPost(request.body.postID, request.body.title, request.body.body, request.body.imageID, function(error) {
             if(error)
                 console.log(__filename + " -> " + error);

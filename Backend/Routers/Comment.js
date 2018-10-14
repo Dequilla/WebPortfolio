@@ -1,12 +1,13 @@
 const express = require('express');
 
 const commentHandler = require('../Handlers/CommentHandler');
+const loginHandler = require('../Handlers/LoginHandler');
 
 const router = express.Router();
 
 router.post(
     '/create',
-    function(request, response)
+    function(request, response, next)
     {
         commentHandler.createComment(
             request.body.commenterName,
@@ -24,8 +25,14 @@ router.post(
 
 router.post(
     '/delete',
-    function(request, response)
+    function(request, response, next)
     {
+        if(!loginHandler.isLoggedIn(request))
+        {
+            next("You are not logged in as an admin");
+            return;
+        }
+
         commentHandler.deleteComment(request.body.commentID, function(error) {
             if(error)
                 console.log(error);
@@ -37,8 +44,14 @@ router.post(
 
 router.post(
     '/edit',
-    function(request, response)
+    function(request, response, next)
     {
+        if(!loginHandler.isLoggedIn(request))
+        {
+            next("You are not logged in as an admin");
+            return;
+        }
+
         commentHandler.editComment(
             request.body.commentID,
             request.body.commenterName,

@@ -2,6 +2,7 @@ const express = require('express');
 
 const postsHandler = require('../PostsHandler');
 const commentHandler = require('../Handlers/CommentHandler');
+const loginHandler = require('../Handlers/LoginHandler');
 
 const router = express.Router();
 
@@ -9,12 +10,14 @@ router.get(
     '/',
     function(request, response)
     {
+        // TODO: Add pagination
         postsHandler.getPosts(1, 25, function(error, posts) {
             if(error)
                 console.log(__filename + error);
 
             const model = {
-                posts: posts
+                posts: posts,
+                isLoggedIn: loginHandler.isLoggedIn(request)
             };
 
             response.render('./Portfolio.hbs', model);
@@ -48,7 +51,8 @@ router.get(
 
                 const model = {
                     post: post,
-                    comments: comments
+                    comments: comments,
+                    isLoggedIn: loginHandler.isLoggedIn(request)
                 }
 
                 response.render('./Portfolio.hbs', model); 
