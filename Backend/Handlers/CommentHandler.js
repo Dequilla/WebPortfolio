@@ -61,3 +61,33 @@ exports.getComments = function(postID, callback)
         callback(error, comments);
     });
 }
+
+exports.deleteComment = function(commentID, callback)
+{
+    const query = "DELETE FROM comments WHERE commentID = ?;";
+
+    db.run(query, [commentID], function(error) {
+        callback(error);
+    });
+}
+
+exports.editComment = function(commentID, commenterName, commenterEmail, commentBody, callback)
+{
+    const query = "UPDATE comments SET \
+                    commenterName = ?, \
+                    commenterEmail = ?, \
+                    commentBody = ? \
+                    WHERE \
+                    commentID = ?;";
+
+    if(!helpers.verifyText(commenterName) ||
+       !helpers.verifyText(commentBody))
+    {
+        callback("ERROR: Commenter name or comment body was empty");
+        return;
+    }
+
+    db.run(query, [commenterName, commenterEmail, commentBody, commentID], function(error) {
+        callback(error);
+    });
+}

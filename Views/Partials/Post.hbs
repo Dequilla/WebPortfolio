@@ -39,7 +39,7 @@
     </div>
     {{#if comments}}
         <div class="post-container">
-            <h1 class="title is-large">
+            <h1 id="comments" class="title is-large">
                 Comments
             </h1>
             {{#each comments}}
@@ -49,6 +49,42 @@
                         <a class="comment-element email" href="mailto:{{commenterEmail}}">{{commenterEmail}}</a>
                     {{/if}}
                     <p class="comment-element body">{{commentBody}}</p>
+                    <div class="columns">
+                        <form class="comment-element column" method="POST" action="/comment/delete">
+                            <input name="postID" type="hidden" value="{{../post.postID}}">
+                            <input name="commentID" type="hidden" value="{{commentID}}">
+                            <input type="submit" class="button is-small" style="background-color: #ffdddd;" value="Delete Comment"/>
+                        </form>
+                        <div class="column comment-element">
+                            <script>
+                                function expandEditForm(commentID)
+                                {
+                                    var editForm = document.getElementById('edit-form-' + commentID);
+                                    editForm.style.maxHeight = '600px';
+                                }
+                            </script>
+                            <a onclick="expandEditForm({{commentID}});" style="top: 5px;" class="button is-small">Edit Comment</a>
+                        </div>
+                    </div>
+                        <form id="edit-form-{{commentID}}" style="max-height: 0px; overflow: hidden; transition: max-height .6s linear; -webkit-transition: max-height .6s linear;" method="POST" action="/comment/edit">
+                            <div class="post-element">
+                                <p style="float: left;">Name:</p>
+                                <input class="input" name="commenterName" type="text" placeholder="Your name" value="{{commenterName}}" required>
+                            </div>
+                            <div class="post-element">
+                                <p style="float: left;">Email:</p>
+                                <input class="input" name="commenterEmail" type="email" placeholder="Your email (not mandatory)" value="{{commenterEmail}}">
+                            </div>
+                            <div class="post-element">
+                                <p style="float: left;">Comment:</p>
+                                <textarea style="resize: vertical; min-height: 6em;" class="input" name="commentBody" placeholder="Comment here" required>{{commentBody}}</textarea>
+                            </div>
+                            <input name="postID" type="hidden" value="{{../post.postID}}" required>
+                            <input name="commentID" type="hidden" value="{{commentID}}" required>
+                            <div class="post-element">
+                                <input class="button" type="submit" value="Edit Comment">
+                            </div>
+                        </form>
                 </div>
             {{/each}}
         </div>
