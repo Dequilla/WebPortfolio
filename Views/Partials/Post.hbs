@@ -88,6 +88,27 @@
                                 <input class="button" type="submit" value="Edit Comment">
                             </div>
                         </form>
+                        <noscript>
+                        <form id="edit-form-{{commentID}}" method="POST" action="/comment/edit">
+                            <div class="post-element">
+                                <p style="float: left;">Name:</p>
+                                <input class="input" name="commenterName" type="text" placeholder="Your name" value="{{commenterName}}" required>
+                            </div>
+                            <div class="post-element">
+                                <p style="float: left;">Email:</p>
+                                <input class="input" name="commenterEmail" type="email" placeholder="Your email (not mandatory)" value="{{commenterEmail}}">
+                            </div>
+                            <div class="post-element">
+                                <p style="float: left;">Comment:</p>
+                                <textarea style="resize: vertical; min-height: 6em;" class="input" name="commentBody" placeholder="Comment here" required>{{commentBody}}</textarea>
+                            </div>
+                            <input name="postID" type="hidden" value="{{../post.postID}}" required>
+                            <input name="commentID" type="hidden" value="{{commentID}}" required>
+                            <div class="post-element">
+                                <input class="button" type="submit" value="Edit Comment">
+                            </div>
+                        </form>
+                        </noscript>
                     {{/if}}
                 </div>
             {{/each}}
