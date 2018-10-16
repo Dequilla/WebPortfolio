@@ -1,11 +1,13 @@
-{{#each images}}
-    <div class="square-wrapper">
-        <div style="background-image: url('/images/{{ imageName }}.{{ fileExtension }}');" class="square">
-            <form id="deleteForm{{id}}" method="post" action="/admin/images/delete/{{id}}">
-                <input type="hidden" name="name" value="value" /> 
-                <a class="delete is-large" onclick="document.getElementById('deleteForm{{id}}').submit();"></a>
-                <a class="copyable" onclick="alert('Image ID has been copied to the clipboard!');" data-clipboard-text="{{id}}"></a>
-            </form>
+<div class="section"></div>
+    {{#each images}}
+        <div class="square-wrapper">
+            <div style="background-image: url('/images/{{ imageName }}.{{ fileExtension }}');" class="square">
+                <form id="deleteForm{{id}}" method="post" action="/admin/images/delete/{{id}}">
+                    <input type="hidden" name="name" value="value" /> 
+                    <a class="delete is-large" onclick="document.getElementById('deleteForm{{id}}').submit();"></a>
+                    <a class="copyable" onclick="alert('Image ID has been copied to the clipboard!');" data-clipboard-text="{{id}}"></a>
+                </form>
+            </div>
         </div>
-    </div>
-{{/each}}
+    {{/each}}
+</div>
