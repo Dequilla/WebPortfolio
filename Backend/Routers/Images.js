@@ -2,6 +2,7 @@ const express = require('express');
 
 const imageHandler = require('../Handlers/ImageHandler');
 const loginHandler = require('../Handlers/LoginHandler');
+const errorHandler = require('../Handlers/ErrorHandler');
 
 const router = express.Router();
 
@@ -23,7 +24,9 @@ router.get(
             {
                 const model = {
                     images: images,
-                    isLoggedIn: loginHandler.isLoggedIn(request)
+                    isLoggedIn: loginHandler.isLoggedIn(request),
+                    error: errorHandler.getError(response, request),
+                    message: errorHandler.getMessage(response, request)
                 };
 
                 response.render('./Images.hbs', model);
@@ -35,17 +38,18 @@ router.get(
 router.post(
     '/upload',
     imageHandler.upload.single('image'),
-    function(request, response, next)
+    function(request, response)
     {
         if(!loginHandler.isLoggedIn(request))
         {
-            next("You need to be logged in as admin to upload images");
+            response.redirect("/admin/images/view");
+            errorHandler.setError("You need to be logged in as admin to upload images");
             return;
         }
 
         imageHandler.uploadImage(request, function(error) {
             if(error)
-                console.log(error);
+                errorHandler.setError("Database malfunction");
 
             response.redirect("/admin/images/view");
         });
@@ -59,13 +63,14 @@ router.post(
     {
         if(!loginHandler.isLoggedIn(request))
         {
-            next("You need to be logged in as admin to update images");
+            errorHandler.setError("You need to be logged in as admin to update images");
+            response.redirect("/admin/images/view");
             return;
         }
 
         imageHandler.updateImage(request, function(error) {
             if(error)
-                console.log(error);
+                errorHandler.setError("Database malfunction");
 
             response.redirect("/admin/images/view");
         });
@@ -78,13 +83,14 @@ router.post(
     {
         if(!loginHandler.isLoggedIn(request))
         {
-            next("You need to be logged in as admin to delete images");
+            errorHandler.setError("You need to be logged in as admin to delete images");
+            response.redirect("/admin/images/view");
             return;
         }
 
         imageHandler.deleteImage(request.params.id, function(error) {
             if(error)
-                console.log(error);
+                errorHandler.setError("Database malfunction");
 
             response.redirect("/admin/images/view");
         });

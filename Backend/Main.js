@@ -1,5 +1,7 @@
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
+const cookieParser = require('cookie-parser');
+
 const database = require('./Database');
 const imageHandler = require('./Handlers/ImageHandler');
 const postsHandler = require('./Handlers/PostsHandler');
@@ -39,6 +41,7 @@ app.set('partialsDir', __dirname + 'Partials/');
 app.use(express.static("Public/"));
 app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded()); // to support URL-encoded bodies
+app.use(cookieParser());
 
 loginHandler.setup(app);
 
@@ -61,7 +64,9 @@ app.get(
     function(request, response) 
     {
         const model = {
-            isLoggedIn: loginHandler.isLoggedIn(request)
+            isLoggedIn: loginHandler.isLoggedIn(request),
+            error: errorHandler.getError(response, request),
+            message: errorHandler.getMessage(response, request)
         }
 
         response.render('./About.hbs', model);
@@ -73,7 +78,9 @@ app.get(
     function(request, response)
     {
         const model = {
-            isLoggedIn: loginHandler.isLoggedIn(request)
+            isLoggedIn: loginHandler.isLoggedIn(request),
+            error: errorHandler.getError(response, request),
+            message: errorHandler.getMessage(response, request)
         }
 
         response.render('./Contact.hbs', model);
@@ -88,7 +95,9 @@ app.use(
         if (request.accepts('html'))
         {
             const model = {
-                isLoggedIn: loginHandler.isLoggedIn(request)
+                isLoggedIn: loginHandler.isLoggedIn(request),
+                error: errorHandler.getError(response, request),
+                message: errorHandler.getMessage(response, request)
             }
 
             response.render('./404.hbs', model);

@@ -2,6 +2,7 @@ const express = require('express');
 
 const commentHandler = require('../Handlers/CommentHandler');
 const loginHandler = require('../Handlers/LoginHandler');
+const errorHandler = require('../Handlers/ErrorHandler');
 
 const router = express.Router();
 

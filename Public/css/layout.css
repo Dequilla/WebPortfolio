@@ -153,3 +153,30 @@ input {
 .comment-element.body {
     padding-top: 10px;
 }
+
+/* Messages and errors */
+.message-section {
+    position: absolute;
+    display: block;
+    width: 50%;
+
+    z-index: 999;
+    top: 10%;
+    margin: 40px;
+
+    animation: fade-out 1s 1;
+    animation-fill-mode: forwards;
+    animation-delay: 2s;
+
+    pointer-events: none;
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}

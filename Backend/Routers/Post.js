@@ -2,6 +2,7 @@ const express = require('express');
 
 const postsHandler = require('../Handlers/PostsHandler.js');
 const loginHandler = require('../Handlers/LoginHandler');
+const errorHandler = require('../Handlers/ErrorHandler');
 
 const router = express.Router();
 
@@ -16,7 +17,9 @@ router.get(
         }
         
         const model = {
-            isLoggedIn: loginHandler.isLoggedIn(request)
+            isLoggedIn: loginHandler.isLoggedIn(request),
+            error: errorHandler.getError(response, request),
+            message: errorHandler.getMessage(response, request)
         }
 
         response.render('./Post.hbs', model);
@@ -77,7 +80,9 @@ router.get(
             const model = {
                 post: post,
                 postID: request.params.postID,
-                isLoggedIn: loginHandler.isLoggedIn(request)
+                isLoggedIn: loginHandler.isLoggedIn(request),
+                error: errorHandler.getError(response, request),
+                message: errorHandler.getMessage(response, request)
             }
 
             response.render('EditPost.hbs', model);

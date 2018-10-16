@@ -1,6 +1,7 @@
 const express = require('express');
 
 const loginHandler = require('../Handlers/LoginHandler');
+const errorHandler = require('../Handlers/ErrorHandler');
 
 const router = express.Router();
 
@@ -9,7 +10,9 @@ router.get(
     function(request, response)
     {
         const model = {
-            isLoggedIn: loginHandler.isLoggedIn(request)
+            isLoggedIn: loginHandler.isLoggedIn(request),
+            error: errorHandler.getError(response, request),
+            message: errorHandler.getMessage(response, request)
         }
 
         if(model.isLoggedIn)
@@ -29,10 +32,12 @@ router.post(
             request)
         )
         {
+            errorHandler.setMessage(response, "You successfully logged in!");
             response.redirect('/');
         }
         else
         {
+            errorHandler.setError(response, "The username or password you entered was wrong!");
             response.redirect('/login');
         }
     }
@@ -43,6 +48,7 @@ router.get(
     function(request, response)
     {
         loginHandler.logout(request);
+        errorHandler.setMessage(response, "You successfully logged out!");
         response.redirect('/');
     }
 )

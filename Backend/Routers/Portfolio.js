@@ -3,6 +3,7 @@ const express = require('express');
 const postsHandler = require('../Handlers/PostsHandler');
 const commentHandler = require('../Handlers/CommentHandler');
 const loginHandler = require('../Handlers/LoginHandler');
+const errorHandler = require('../Handlers/ErrorHandler');
 
 const router = express.Router();
 
@@ -17,7 +18,9 @@ router.get(
 
             const model = {
                 posts: posts,
-                isLoggedIn: loginHandler.isLoggedIn(request)
+                isLoggedIn: loginHandler.isLoggedIn(request),
+                error: errorHandler.getError(response, request),
+                message: errorHandler.getMessage(response, request)
             };
 
             response.render('./Portfolio.hbs', model);
@@ -52,7 +55,9 @@ router.get(
                 const model = {
                     post: post,
                     comments: comments,
-                    isLoggedIn: loginHandler.isLoggedIn(request)
+                    isLoggedIn: loginHandler.isLoggedIn(request),
+                    error: errorHandler.getError(response, request),
+                    message: errorHandler.getMessage(response, request)
                 }
 
                 response.render('./Portfolio.hbs', model); 
