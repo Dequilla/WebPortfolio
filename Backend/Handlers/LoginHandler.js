@@ -21,6 +21,11 @@ exports.checkLogin = function(user, pass, request)
     return request.session.isLoggedIn;
 }
 
+exports.logout = function(request)
+{
+    request.session.isLoggedIn = false;
+}
+
 exports.isLoggedIn = function(request)
 {
     if(request.session != null &&

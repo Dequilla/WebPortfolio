@@ -46,7 +46,7 @@ app.use('/admin/images/', images.router);
 app.use('/admin/post/', posts.router);
 app.use('/portfolio', portfolio.router);
 app.use('/comment/', comment.router);
-app.use('/login', login.router);
+app.use('/', login.router);
 
 app.get(
     '/', 

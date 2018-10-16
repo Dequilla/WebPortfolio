@@ -5,7 +5,7 @@ const loginHandler = require('../Handlers/LoginHandler');
 const router = express.Router();
 
 router.get(
-    '/',
+    '/login',
     function(request, response)
     {
         const model = {
@@ -20,7 +20,7 @@ router.get(
 )
 
 router.post(
-    '/',
+    '/login',
     function(request, response)
     {
         if(loginHandler.checkLogin(
@@ -35,6 +35,15 @@ router.post(
         {
             response.redirect('/login');
         }
+    }
+)
+
+router.get(
+    '/logout',
+    function(request, response)
+    {
+        loginHandler.logout(request);
+        response.redirect('/');
     }
 )
 
