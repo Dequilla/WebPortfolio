@@ -1,6 +1,6 @@
 const express = require('express');
 
-const imageHandler = require('../ImageHandler');
+const imageHandler = require('../Handlers/ImageHandler');
 const loginHandler = require('../Handlers/LoginHandler');
 
 const router = express.Router();

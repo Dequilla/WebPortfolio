@@ -1,7 +1,7 @@
 const imageHandler = require('./ImageHandler');
 
 const errorHandler = require('./ErrorHandler');
-const database = require('./Database');
+const database = require('../Database');
 
 const db = database.db;
 

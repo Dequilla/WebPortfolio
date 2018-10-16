@@ -1,9 +1,9 @@
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const database = require('./Database');
-const imageHandler = require('./ImageHandler');
-const postsHandler = require('./PostsHandler');
-const errorHandler = require('./ErrorHandler');
+const imageHandler = require('./Handlers/ImageHandler');
+const postsHandler = require('./Handlers/PostsHandler');
+const errorHandler = require('./Handlers/ErrorHandler');
 const commentHandler = require('./Handlers/CommentHandler');
 const loginHandler = require('./Handlers/LoginHandler');
 

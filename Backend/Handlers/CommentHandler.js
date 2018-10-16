@@ -1,4 +1,4 @@
-const errorHandler = require('../ErrorHandler');
+const errorHandler = require('./ErrorHandler');
 const database = require('../Database');
 const helpers = require('../Helpers');
 

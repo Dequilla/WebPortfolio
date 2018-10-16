@@ -1,6 +1,6 @@
 const express = require('express');
 
-const postsHandler = require('../PostsHandler.js');
+const postsHandler = require('../Handlers/PostsHandler.js');
 const loginHandler = require('../Handlers/LoginHandler');
 
 const router = express.Router();

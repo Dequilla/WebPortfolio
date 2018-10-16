@@ -4,13 +4,13 @@ const fs = require('fs');
 
 const errorHandler = require('./ErrorHandler')
 
-const database = require('./Database');
+const database = require('../Database');
 const db = database.db;
 
-const imagesFolder = __dirname + "/../Public/images/";
+const imagesFolder = __dirname + "/../../Public/images/";
 
 var upload = multer({ 
-    dest: __dirname + '/../Public/upload/',
+    dest: __dirname + '/../../Public/upload/',
     onError: function(error, next)
     {
         console.log(error);
