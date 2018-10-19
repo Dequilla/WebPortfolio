@@ -17,8 +17,6 @@ router.get(
             return;
         }
             
-        const csrf = request.csrfToken();
-
         // TODO: Add pagination
         imageHandler.getImages(1, 25, function(error, images) {
             if(error)
@@ -30,7 +28,7 @@ router.get(
                     isLoggedIn: loginHandler.isLoggedIn(request),
                     error: errorHandler.getError(response, request),
                     message: errorHandler.getMessage(response, request),
-                    csrfToken: csrf
+                    csrfToken: request.csrfToken()
                 };
 
                 response.render('./Images.hbs', model);
@@ -47,13 +45,13 @@ router.post(
         if(!loginHandler.isLoggedIn(request))
         {
             response.redirect("/admin/images/view");
-            errorHandler.setError("You need to be logged in as admin to upload images");
+            errorHandler.setError(response, "You need to be logged in as admin to upload images");
             return;
         }
 
         imageHandler.uploadImage(request, function(error) {
             if(error)
-                errorHandler.setError("Database malfunction");
+                errorHandler.setError(response, "Database malfunction");
 
             response.redirect("/admin/images/view");
         });
@@ -62,19 +60,21 @@ router.post(
 
 router.post(
     '/update',
-    imageHandler.upload.single('image'),
     function(request, response, next)
     {
         if(!loginHandler.isLoggedIn(request))
         {
-            errorHandler.setError("You need to be logged in as admin to update images");
+            errorHandler.setError(response, "You need to be logged in as admin to update images");
             response.redirect("/admin/images/view");
             return;
         }
 
         imageHandler.updateImage(request, function(error) {
             if(error)
-                errorHandler.setError("Database malfunction");
+            {
+                console.log(error);
+                errorHandler.setError(response, "Database malfunction");
+            }
 
             response.redirect("/admin/images/view");
         });
@@ -87,14 +87,14 @@ router.post(
     {
         if(!loginHandler.isLoggedIn(request))
         {
-            errorHandler.setError("You need to be logged in as admin to delete images");
+            errorHandler.setError(response, "You need to be logged in as admin to delete images");
             response.redirect("/admin/images/view");
             return;
         }
 
         imageHandler.deleteImage(request.params.id, function(error) {
             if(error)
-                errorHandler.setError("Database malfunction");
+                errorHandler.setError(response, "Database malfunction");
 
             response.redirect("/admin/images/view");
         });

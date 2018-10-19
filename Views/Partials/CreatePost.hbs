@@ -10,6 +10,7 @@
             <label for="imageID">Image ID:</label><input class="input" type="number" name="imageID"/>
         </div>
         <div class="post-element">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <input class="input" type="submit"/>
         </div>
     </form>

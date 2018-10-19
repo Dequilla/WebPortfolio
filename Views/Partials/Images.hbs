@@ -4,7 +4,7 @@
             <div style="background-image: url('/images/{{ imageName }}.{{ fileExtension }}');" class="square">
                 <form id="deleteForm{{id}}" method="post" action="/admin/images/delete/{{id}}"> 
                     <a class="delete is-large" onclick="document.getElementById('deleteForm{{id}}').submit();"></a>
-                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                    <input type="hidden" name="_csrf" value="{{../csrfToken}}">
                     <noscript><input type="submit" value="Delete Image"/></noscript>
                     <noscript><p><span style="font-weight: bold;">Image ID is:</span> {{id}} </p></noscript>
                     <a class="copyable" onclick="alert('Image ID has been copied to the clipboard!');" data-clipboard-text="{{id}}"></a>

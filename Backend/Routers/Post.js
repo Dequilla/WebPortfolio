@@ -12,15 +12,16 @@ router.get(
     {
         if(!loginHandler.isLoggedIn(request))
         {
-	    errorHandler.setError(response, "You need to be logged in as an admin to do that.");
-	    response.redirect('/login');
+	        errorHandler.setError(response, "You need to be logged in as an admin to do that.");
+	        response.redirect('/login');
             return;
         }
         
         const model = {
             isLoggedIn: loginHandler.isLoggedIn(request),
             error: errorHandler.getError(response, request),
-            message: errorHandler.getMessage(response, request)
+            message: errorHandler.getMessage(response, request),
+            csrfToken: request.csrfToken()
         }
 
         response.render('./Post.hbs', model);
@@ -34,14 +35,14 @@ router.post(
         if(!loginHandler.isLoggedIn(request))
         {
             errorHandler.setError(response, "You need to be logged in as an admin to do that.");
-	    response.redirect('/login');
+	        response.redirect('/login');
             return;
         }
 
         postsHandler.createPost(request.body.title, request.body.body, request.body.imageID, function(error)
         {
             if(error)
-           	errorHandler.setError(response, "Something went wrong when adding the post to the database.");
+           	    errorHandler.setError(response, "Something went wrong when adding the post to the database.");
 
             response.redirect('/admin/post/create');
         });
@@ -55,13 +56,13 @@ router.post(
         if(!loginHandler.isLoggedIn(request))
         {
             errorHandler.setError(response, "You need to be logged in as an admin to do that.");
-	    response.redirect('/login');
+	        response.redirect('/login');
             return;
         }
 
         postsHandler.deletePost(request.body.postID, function(error) {
             if(error)
-        	errorHandler.setError(response, "Something went wrong when trying to delete the post from the database.");        
+        	    errorHandler.setError(response, "Something went wrong when trying to delete the post from the database.");        
 	});
 
         response.redirect('/portfolio');  
@@ -75,20 +76,21 @@ router.get(
         if(!loginHandler.isLoggedIn(request))
         {
             errorHandler.setError(response, "You need to be logged in as an admin to do that.");
-	    response.redirect('/login');
+	        response.redirect('/login');
             return;
         }
 
         postsHandler.getPost(request.params.postID, function(error, post) {
-	    if(error || post == undefined)
-		errorHandler.setError(response, "Something went wrong when retrieving the post to edit.");
+	    if(error || post === undefined)
+		    errorHandler.setError(response, "Something went wrong when retrieving the post to edit.");
 
             const model = {
                 post: post,
                 postID: request.params.postID,
                 isLoggedIn: loginHandler.isLoggedIn(request),
                 error: errorHandler.getError(response, request),
-                message: errorHandler.getMessage(response, request)
+                message: errorHandler.getMessage(response, request),
+                csrfToken: request.csrfToken()
             }
 
             response.render('EditPost.hbs', model);
@@ -104,7 +106,7 @@ router.post(
         if(!loginHandler.isLoggedIn(request))
         {
             errorHandler.setError(response, "You need to be logged in as an admin to do that.");
-	    response.redirect('/login');
+	        response.redirect('/login');
             return;
         }
 

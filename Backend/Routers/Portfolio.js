@@ -20,7 +20,8 @@ router.get(
                 posts: posts,
                 isLoggedIn: loginHandler.isLoggedIn(request),
                 error: errorHandler.getError(response, request),
-                message: errorHandler.getMessage(response, request)
+                message: errorHandler.getMessage(response, request),
+                csrfToken: request.csrfToken()
             };
 
             response.render('./Portfolio.hbs', model);
@@ -57,7 +58,8 @@ router.get(
                     comments: comments,
                     isLoggedIn: loginHandler.isLoggedIn(request),
                     error: errorHandler.getError(response, request),
-                    message: errorHandler.getMessage(response, request)
+                    message: errorHandler.getMessage(response, request),
+                    csrfToken: request.csrfToken()
                 }
 
                 response.render('./Portfolio.hbs', model); 

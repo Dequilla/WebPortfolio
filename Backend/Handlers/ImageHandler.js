@@ -122,9 +122,8 @@ exports.updateImage = function(request, callback)
     const newPath = imagesFolder;
     const name = request.file.filename;
 
-    if(request.body.imageID == undefined ||
-        request.body.imageID == null ||
-        !Number.isInteger(parseInt(request.body.imageID)) 
+    if(request.body.imageID === undefined ||
+        request.body.imageID === null
     )
     {
         callback("No imageID sent to the server, image can't be updated.");

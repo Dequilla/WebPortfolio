@@ -10,6 +10,7 @@
             <label for="imageID">Image ID:</label><input class="input" type="number" name="imageID" value="{{post.imageID}}"/>
         </div>
         <div class="post-element">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <input type="hidden" name="postID" value="{{postID}}"/>
             <input class="input" type="submit"/>
         </div>

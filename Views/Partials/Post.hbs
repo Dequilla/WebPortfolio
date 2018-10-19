@@ -7,9 +7,11 @@
         <div class="columns">
             <div class="column is-4"></div>
             <form class="column is-2" method="GET" action="/admin/post/edit/{{post.postID}}">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <input class="button" type="submit" value="Edit Post">
             </form> 
             <form class="column is-2" method="POST" action="/admin/post/delete">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <input type="hidden" name="postID" value="{{post.postID}}">
                 <input class="button" style="background-color: #ffdddd;" type="submit" value="Delete Post">
             </form>
@@ -35,6 +37,7 @@
             </div>
             <input name="postID" type="hidden" value="{{post.postID}}" required>
             <div class="post-element">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <input class="button" type="submit" value="Comment">
             </div>
         </form>
@@ -56,6 +59,7 @@
                             <form class="comment-element column" method="POST" action="/comment/delete">
                                 <input name="postID" type="hidden" value="{{../post.postID}}">
                                 <input name="commentID" type="hidden" value="{{commentID}}">
+                                <input type="hidden" name="_csrf" value="{{../csrfToken}}">
                                 <input type="submit" class="button is-small" style="background-color: #ffdddd;" value="Delete Comment"/>
                             </form>
                             <div class="column comment-element">
@@ -85,6 +89,7 @@
                             <input name="postID" type="hidden" value="{{../post.postID}}" required>
                             <input name="commentID" type="hidden" value="{{commentID}}" required>
                             <div class="post-element">
+                                <input type="hidden" name="_csrf" value="{{../csrfToken}}"> 
                                 <input class="button" type="submit" value="Edit Comment">
                             </div>
                         </form>
@@ -105,6 +110,7 @@
                             <input name="postID" type="hidden" value="{{../post.postID}}" required>
                             <input name="commentID" type="hidden" value="{{commentID}}" required>
                             <div class="post-element">
+                                <input type="hidden" name="_csrf" value="{{../csrfToken}}">
                                 <input class="button" type="submit" value="Edit Comment">
                             </div>
                         </form>
