@@ -12,7 +12,8 @@ router.get(
         const model = {
             isLoggedIn: loginHandler.isLoggedIn(request),
             error: errorHandler.getError(response, request),
-            message: errorHandler.getMessage(response, request)
+            message: errorHandler.getMessage(response, request),
+            csrfToken: request.csrfToken()
         }
 
         if(model.isLoggedIn)

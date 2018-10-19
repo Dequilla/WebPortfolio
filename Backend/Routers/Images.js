@@ -12,22 +12,25 @@ router.get(
     {
         if(!loginHandler.isLoggedIn(request))
         {
-	    errorHandler.setError(response, "You need to be logged in to do this action.");
-	    response.redirect('/login');
+	        errorHandler.setError(response, "You need to be logged in to do this action.");
+	        response.redirect('/login');
             return;
         }
-    
+            
+        const csrf = request.csrfToken();
+
         // TODO: Add pagination
         imageHandler.getImages(1, 25, function(error, images) {
             if(error)
-		errorHandler.setError(response, "Something when wrong when retrieving images from the database");
+		        errorHandler.setError(response, "Something when wrong when retrieving images from the database");
             else
             {
                 const model = {
                     images: images,
                     isLoggedIn: loginHandler.isLoggedIn(request),
                     error: errorHandler.getError(response, request),
-                    message: errorHandler.getMessage(response, request)
+                    message: errorHandler.getMessage(response, request),
+                    csrfToken: csrf
                 };
 
                 response.render('./Images.hbs', model);
@@ -38,9 +41,9 @@ router.get(
 
 router.post(
     '/upload',
-    imageHandler.upload.single('image'),
     function(request, response)
     {
+	
         if(!loginHandler.isLoggedIn(request))
         {
             response.redirect("/admin/images/view");

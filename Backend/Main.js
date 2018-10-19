@@ -3,6 +3,13 @@
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const cookieParser = require('cookie-parser');
+const csurf = require('csurf');
+
+const app = express();
+app.engine('hbs', expressHandlebars({
+    defaultLayout: 'Main',
+    extname: '.hbs'
+}));
 
 const database = require('./Database');
 const imageHandler = require('./Handlers/ImageHandler');
@@ -17,19 +24,6 @@ const portfolio = require('./Routers/Portfolio');
 const comment = require('./Routers/Comment');
 const login = require('./Routers/Login');
 
-const app = express();
-app.engine('hbs', expressHandlebars({
-    defaultLayout: 'Main',
-    extname: '.hbs',
-    helpers: {
-        getImageURI: function(imageID) {
-            imageHandler.getImageURI(imageID, function(error, imageURI) {
-                return imageURI;
-            });
-        }
-    }
-}));
-
 database.setup();
 imageHandler.setup();
 postsHandler.setup();
@@ -40,12 +34,14 @@ app.set('views', 'Views/');
 app.set('layoutsDir', __dirname + 'Layouts/');
 app.set('partialsDir', __dirname + 'Partials/');
 
+loginHandler.setup(app);
+app.use(imageHandler.upload.single('image')); // This has to be done before we use csurf but also before we include our routers
+
 app.use(express.static("Public/"));
 app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded()); // to support URL-encoded bodies
 app.use(cookieParser());
-
-loginHandler.setup(app);
+app.use(csurf({cookie: true})); // Has to be done after session or cookie parser and also AFTER multer is added
 
 app.use('/admin/images/', images.router);
 app.use('/admin/post/', posts.router);
