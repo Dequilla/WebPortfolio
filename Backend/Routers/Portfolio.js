@@ -14,7 +14,7 @@ router.get(
         // TODO: Add pagination
         postsHandler.getPosts(1, 25, function(error, posts) {
             if(error)
-                console.log(__filename + error);
+		errorHandler.setError(response, "Something went wrong when retrieving the posts from the database");
 
             const model = {
                 posts: posts,
@@ -37,7 +37,7 @@ router.get(
             if(error || post == undefined)
             {
                 response.redirect('/portfolio');
-                console.log(__filename + error);
+		errorHandler.setError(response, "Something went wrong when retrieving the post from the database");
                 return;
             }
 
@@ -45,7 +45,7 @@ router.get(
                 if(error || comments == undefined)
                 {
                     response.redirect('/portfolio');
-                    console.log(__filename + error);
+		    errorHandler.setError(response, "Something when wrong while retriving comments from the database");
                     return;
                 }
 

@@ -12,14 +12,15 @@ router.get(
     {
         if(!loginHandler.isLoggedIn(request))
         {
-            next("You need to be logged in to access this page")
+	    errorHandler.setError(response, "You need to be logged in to do this action.");
+	    response.redirect('/login');
             return;
         }
     
         // TODO: Add pagination
         imageHandler.getImages(1, 25, function(error, images) {
             if(error)
-                console.log(error);
+		errorHandler.setError(response, "Something when wrong when retrieving images from the database");
             else
             {
                 const model = {

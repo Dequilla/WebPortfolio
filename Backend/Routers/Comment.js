@@ -17,7 +17,7 @@ router.post(
             request.body.postID,
             function(error) {
                 if(error)
-                    console.log(error);
+			errorHandler.setError(response, "Something went wrong when posting to the database, please try again later.");
 
                 response.redirect('/portfolio/' + request.body.postID + "#comments");
             });
@@ -30,13 +30,14 @@ router.post(
     {
         if(!loginHandler.isLoggedIn(request))
         {
-            next("You are not logged in as an admin");
+	    errorHandler.setError(response, "You need to be logged in as an admin.");
+	    response.redirect('/portfolio/');
             return;
         }
 
         commentHandler.deleteComment(request.body.commentID, function(error) {
             if(error)
-                console.log(error);
+	        errorHandler.setError(response, "Something went wrong when deleting the comment from the database.");
 
             response.redirect('/portfolio/' + request.body.postID + "#comments");
         });
@@ -49,7 +50,8 @@ router.post(
     {
         if(!loginHandler.isLoggedIn(request))
         {
-            next("You are not logged in as an admin");
+	    errorHandler.setError(response, "You need to be logged in as an admin.");
+	    response.redirect('/portfolio');
             return;
         }
 
@@ -60,7 +62,7 @@ router.post(
             request.body.commentBody,
             function(error) {
                 if(error)
-                    console.log(error);
+		    errorHandler.setError(response, "Something went wrong in the database when editing the comment.");
 
                 response.redirect('/portfolio/' + request.body.postID + "#comments");
             });
