@@ -1,0 +1,50 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "A project to use as my portfolio",
+  "main": "/Backend/Main.js",
+  "dependencies": {
+    "busboy": "^0.2.14",
+    "cookie": "^0.3.1",
+    "body-parser": "^1.17.1",
+    "buffer-from": "^1.1.1",
+    "cookie-signature": "^1.1.0",
+    "crc": "^3.8.0",
+    "debug": "^2.6.3",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.2",
+    "ee-first": "^1.1.1",
+    "express-handlebars": "^3.0.0",
+    "depd": "^1.1.2",
+    "finalhandler": "^1.1.1",
+    "handlebars": "^4.0.12",
+    "express-session": "^1.15.6",
+    "media-typer": "^0.3.0",
+    "merge-descriptors": "^1.0.1",
+    "mime-types": "^2.1.20",
+    "multer": "^1.4.1",
+    "object.assign": "^4.1.0",
+    "node-pre-gyp": "^0.11.0",
+    "on-headers": "^1.0.1",
+    "parseurl": "^1.3.2",
+    "promise": "^8.0.2",
+    "sqlite3": "^3.1.8",
+    "uid-safe": "^2.1.5",
+    "readable-stream": "^2.2.9",
+    "utils-merge": "^1.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dequilla/WebPortfolio.git"
+  },
+  "author": "Edwin \"Dequilla\" Wallin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dequilla/WebPortfolio/issues"
+  },
+  "homepage": "https://github.com/Dequilla/WebPortfolio#readme"
+}

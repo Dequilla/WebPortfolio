@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const cookieParser = require('cookie-parser');
@@ -109,4 +111,4 @@ app.use(
     }
 )
 
-app.listen(8080);
+app.listen(3000);

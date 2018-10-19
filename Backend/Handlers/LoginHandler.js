@@ -1,8 +1,8 @@
 const express = require('express');
 const session = require('express-session');
 
-const username = 'username';
-const password = 'password';
+const username = 'dequilla';
+const password = 'UltraHardPassword';
 
 exports.setup = function(app)
 {
